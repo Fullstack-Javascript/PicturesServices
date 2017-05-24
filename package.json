@@ -29,5 +29,8 @@
     "mocha": "^3.2.0",
     "mongodb": "^2.2.27",
     "superagent": "^3.3.1"
+  },
+  "devDependencies": {
+    "node-inspector": "^1.1.1"
   }
 }

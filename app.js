@@ -4,18 +4,23 @@ var MongoClient = require('mongodb').MongoClient;
 
 nodeServer.start();
 
-var validateLogin = exports.validateLogin = function (db) {
-    db.collection('picturesUsers').find({}).toArray(function(err, docs){
-            console.log(docs[0])
+var validateLogin = exports.validateLogin = function (db,req, res) {
+    db.collection('picturesUsers').find({"userName":req.query.username, "password": req.query.password}).toArray(function(err, docs){
+          return docs;           
         });
-    return true;
 }
 
 
 MongoClient.connect(mdb.url, function(err, db){
-    nodeServer.app.get('/validateLogin?:username', function(req, res){
-        console.log(req.query.username)
-     validateLogin(db);        
+    nodeServer.app.get('/validateLogin', function(req, res){
+        var docs = validateLogin(db,req,res);
+        console.log("initial log.........")
+        if(docs[0]) {
+            res.send(docs[0])
+        } else {
+            console.log("failing.........");
+            res.send("login Failed")
+        }             
     });
     nodeServer.app.use(function(req, res){
         res.sendStatus(404); 
