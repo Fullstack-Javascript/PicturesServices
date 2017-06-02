@@ -2,11 +2,11 @@ var expect = require('chai').expect;
 
 var request = require('superagent');
 
-
+var nodeapp = require('../config/server');
+var baseUrl = 'http://localhost:5000';
 
 describe("Pictures login validation: ",function() {
-    var nodeapp = require('../config/server');
-    var baseUrl = 'http://localhost:5000';
+
     before(function(done){
         nodeapp.start(done)
     })
@@ -31,4 +31,19 @@ describe("Pictures login validation: ",function() {
           //  done();
         //})
     //})
+})
+
+describe('Test the getImages function which pulls images for logged in user', function () {
+    before (function(done) {
+        nodeapp.start(done);
+    })
+    after (function(done) {
+        nodeapp.stop(done);
+    })
+    it ('Check if the function exists', function(done) {
+        request.get(baseUrl+'/getImages').end(function assert(err, resp) {
+            expect(resp).to.have.property('status',200);
+            done();
+        });
+    });
 })
